@@ -1,59 +1,82 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Freelance Marketplace API (Work in Progress )
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+An elegant, highly secure, and robust RESTful API for a Freelance Marketplace, built with **Laravel** and **MySQL**. This project is designed following advanced software engineering patterns, prioritizing clean code, security, and scalability.
 
-## About Laravel
+> **Status:** This project is currently under active development. Features are being added incrementally following strict SOLID principles.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+##  Software Engineering & Best Practices Applied
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Unlike typical basic CRUD applications, this API is architected with a production-ready mindset:
+*   **Single Responsibility Principle (SRP):** Controllers are kept strictly "thin" (Skinny Controllers). Data validation is fully delegated to **Form Requests**, and authorization to **Policies**.
+*   **Database Safety & Integrity:** Critical multi-row operations (such as accepting a proposal and updating project status) are wrapped in **DB Transactions** to prevent data corruption.
+*   **API Security:** Secured via **Laravel Sanctum** token-based authentication with protection against ID spoofing and BOLA (Broken Object Level Authorization).
+*   **Standardized Responses:** Implements a custom unified `ApiResponse` trait to ensure consistent JSON structures for all success and error responses.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+##  Tech Stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+*   **Backend Framework:** Laravel (PHP)
+*   **Database:** MySQL 
+*   **Authentication:** Laravel Sanctum (Token-Based)
+*   **Architecture Pattern:** RESTful API Design
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+##  Project Roadmap & Features
 
-### Premium Partners
+### 1. Authentication & Profile Management
+- [x] Secure registration with Role-based assignment (`Client` / `Freelancer`)
+- [x] Login & Token generation with Device Name binding
+- [x] Secure logout (Revoking only the current device's access token)
+- [x] Comprehensive Profile view & secure updates with custom Mutators/Accessors for avatars and links
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Project Management
+- [x] Public listing (with pagination) and detailed single project view
+- [x] Create project (restricted to `Client` role)
+- [x] Secure project editing & deletion (guarded via Laravel Policies to ensure only the owner can modify)
+- [x] Project-Skills association via a robust pivot table system
 
-## Contributing
+### 3. Proposals Ecosystem (Core Business Logic)
+- [x] Submit proposals (restricted to `Freelancer` role, prevents duplicate proposals)
+- [x] Client action: Accept a proposal (automatically updates project status to `in_progress` and rejects other pending proposals)
+- [x] Client action: Reject a proposal
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Reviews & Ratings
+- [x] Post-project reviews (automatically detects the roles and assigns the review to the correct party)
+- [x] Rating system (preventing duplicate reviews on the same project)
 
-## Code of Conduct
+### 5. Upcoming Features (Under Development )
+- [ ] Notifications System (bell notifications for proposal status changes)
+- [ ] User Dashboard / Analytics endpoint
+- [ ] Project categorization & advanced search filters
+- [ ] Integrate caching mechanisms (using Redis or Database Driver) to store frequently requested skills and highly popular projects.
+- [ ] Implement API rate limiting and throttling (e.g., restricting failed login attempts) to safeguard endpoints against brute-force and       DDoS/flood attacks.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+##  API Endpoints (Brief Overview)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Auth & Profile
+*   `POST /api/register` - Create a new account
+*   `POST /api/login` - Authenticate and get a bearer token
+*   `POST /api/logout` - Revoke token (Auth Required)
+*   `GET /api/profile` - Fetch current user's profile (Auth Required)
+*   `PUT /api/profile` - Update profile details (Auth Required)
 
-## License
+### Projects
+*   `GET /api/projects` - List all projects
+*   `GET /api/projects/{id}` - Fetch single project details
+*   `POST /api/projects` - Create a new project (Auth & Client Only)
+*   `PUT /api/projects/{id}` - Edit a project (Auth & Owner Only)
+*   `DELETE /api/projects/{id}` - Delete/Close a project (Auth & Owner Only)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Proposals & Reviews
+*   `POST /api/proposals` - Submit a proposal (Freelancer Only)
+*   `PATCH /api/proposals/{id}/accept` - Accept a proposal (Client Owner Only)
+*   `PATCH /api/proposals/{id}/reject` - Reject a proposal (Client Owner Only)
+*   `POST /api/reviews` - Rate and review a completed project
+
+---
