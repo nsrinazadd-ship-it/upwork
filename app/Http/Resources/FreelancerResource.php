@@ -16,7 +16,7 @@ class FreelancerResource extends JsonResource
     {
         return [
             'id'                 => $this->id,
-            'name'               => $this->name,
+            'name'               => $this->user?->full_name,
             'profile_image'      =>$this->profile_image,
             'title'              => $this->title,
             'bio'                => $this->bio,

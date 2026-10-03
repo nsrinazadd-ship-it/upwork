@@ -70,6 +70,11 @@ class StoreProposalRequest extends FormRequest
                 'numeric',
                 'min:1'
             ],
+            'estimated_days'=>[
+                'required',
+                'integer',
+                'min:1'
+            ]
         ];
     }
 }

@@ -23,7 +23,7 @@ class ProposalController extends Controller
         $request->validate(['project_id' => 'required|exists:projects,id']);
         $project=Project::findOrFail($request->project_id);
         $query=Proposal::where('project_id',$project->id)
-        ->with(['freelancer.skills'])
+        ->with(['freelancer.freelancerProfile.skills'])
         ->latest();
 
         if(Auth::id() !== $project->client_id){
