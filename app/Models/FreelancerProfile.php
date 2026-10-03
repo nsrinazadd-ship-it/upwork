@@ -26,7 +26,6 @@ class FreelancerProfile extends Model
         return[
             'portfolio_links'=>'array',
             'is_verified'=> 'boolean',
-            'skills_summray'=>'array',
             ];
     }
     protected function hourlyRate():Attribute{
@@ -38,7 +37,7 @@ class FreelancerProfile extends Model
 
     protected function phoneNumber():Attribute{
         return Attribute::make(
-            set:fn(string $value)=>preg_replace('/^[0-9]+/','',$value)
+            set:fn(string $value)=>preg_replace('/[^0-9]/','',$value)
         );
     }
 
@@ -55,27 +54,21 @@ class FreelancerProfile extends Model
         );
     }
 
-    /**
-    * public function scopeVerifiedActive(Builder $query):Builder{
+        public function scopeVerifiedActive(Builder $query):Builder{
             return $query->where('is_verified', true)
             ->whereHas('user', function ($q) {
                     $q->whereNotNull('email_verified_at');});
 
-    }  */
-
-    protected static function booted():void{
-        static::addGlobalScope('verified_active',function(Builder $builder){
-            $builder->where('is_verified',true);
-        });
     }
+
 
     public function scopeAvailable(Builder $query):Builder{
         return $query->where('availability','available');
     }
 
     public function scopeHighestRated(Builder $query):Builder{
-        return $query->withAvg('reviewsReceived','rating')
-        ->orderBy('reviews_received_avg_rating','desc');
+        return $query->withAvg('user.reviewsReceived','rating')
+        ->orderBy('user_reviews_received_avg_rating','desc');
     }
 
     public function user():BelongsTo{

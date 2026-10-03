@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ApiRequestLog extends Model
 {
+    const UPDATED_AT = null;
+
     protected $fillable = [
         'user_id',
         'url',

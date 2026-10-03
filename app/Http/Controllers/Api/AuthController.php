@@ -17,7 +17,8 @@ class AuthController extends Controller
         $validated =$request->validated();
 
         $user=User::create([
-            'name' =>$validated['name'],
+            'first_name' =>$validated['first_name'],
+            'last_name'  =>$validated['last_name'],
             'email'=>$validated['email'],
             'password'=>Hash::make($validated['password']),
             'role' =>$validated['role'],
@@ -38,7 +39,7 @@ class AuthController extends Controller
 
         $user=User::where('email',$validated['email'])->first();
 
-        if(! $user && ! Hash::check($validated['password'],$user->password)){
+        if(! $user || ! Hash::check($validated['password'],$user->password)){
             return $this->error('Invalid credentials provided.', 401);
         }
 

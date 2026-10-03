@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use PhpParser\Node\Expr\FuncCall;
 
 class Skill extends Model
 {

@@ -28,16 +28,16 @@ trait ApiResponse{
         return $this->coreResponse(true,$message,null,null,Response::HTTP_NO_CONTENT);
     }
 
-    protected function error(string $message='Something went wrong.',mixed $errors=null,int $statusCode =Response::HTTP_BAD_GATEWAY):JsonResponse{
+    protected function error(string $message='Something went wrong.',int $statusCode =Response::HTTP_BAD_GATEWAY ,mixed $errors=null):JsonResponse{
         return $this->coreResponse(false,$message,null,$errors,$statusCode);
     }
 
     protected function forbidden(string $message ='You do not have permission to access this resource.'):JsonResponse{
-        return $this->error($message,null,Response::HTTP_FORBIDDEN);
+        return $this->error($message,Response::HTTP_FORBIDDEN);
     }
 
     protected function unauthorized(string $message='Authentication required.'):JsonResponse{
-        return $this->error($message,null,Response::HTTP_UNAUTHORIZED);
+        return $this->error($message,Response::HTTP_UNAUTHORIZED);
     }
 
 }

@@ -16,11 +16,13 @@ class LogApiRequests
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $request->attributes->set('log_start_time', microtime(true));
+
         return $next($request);
     }
 
     public function terminate(Request $request , Response $response):void{
-        $duration=microtime(true)-LARAVEL_START;
+        $duration=microtime(true)-$request->attributes->get('log_start_time', microtime(true));
 
         if($request->is('telescope*')){
             return;

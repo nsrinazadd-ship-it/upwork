@@ -42,7 +42,7 @@ class ProhibitOffensiveContent implements ValidationRule
         }
 
     }
-    protected function fallbackLocalCheck($value): bool
+    protected function fallbackLocalCheck(mixed $value): bool
     {
         $badWords = ['كلمة_سيئة1', 'كلمة_سيئة2'];
         foreach ($badWords as $word) {

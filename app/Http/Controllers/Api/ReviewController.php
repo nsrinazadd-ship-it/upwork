@@ -19,7 +19,7 @@ class ReviewController extends Controller
         $validated=$request->validated();
         $authId=Auth::id();
 
-        $project=Project::findOrFail($validated['Project_id']);
+        $project=Project::findOrFail($validated['project_id']);
         $acceptedProposal=$project->proposals()->where('status','accepted')->first();
 
         if(!$acceptedProposal){

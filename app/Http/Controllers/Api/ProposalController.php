@@ -22,10 +22,15 @@ class ProposalController extends Controller
     {
         $request->validate(['project_id' => 'required|exists:projects,id']);
         $project=Project::findOrFail($request->project_id);
-        $proposals=Proposal::where('project_id',$request->project_id)
+        $query=Proposal::where('project_id',$project->id)
         ->with(['freelancer.skills'])
-        ->latest()
-        ->paginate(10);
+        ->latest();
+
+        if(Auth::id() !== $project->client_id){
+            $query->where('freelancer_id',Auth::id());
+        }
+
+        $proposals=$query->paginate(10);
 
         return $this->success(
             ProposalResource::collection($proposals)->response()->getData(true),
@@ -105,7 +110,7 @@ class ProposalController extends Controller
     }
 
     public function reject(Proposal $proposal):JsonResponse{
-        Gate::authorize('manager',$proposal);
+        Gate::authorize('manage',$proposal);
         if($proposal->status->value !== 'pending'){
             return $this->error('Only pending proposals can be rejected.', 422);
         }

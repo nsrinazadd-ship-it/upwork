@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Laravel\Sanctum\HasApiTokens;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Database\Factories\UserFactory;
@@ -11,12 +12,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
-
+    use HasFactory, Notifiable, HasApiTokens;
     /**
      * The attributes that are mass assignable.
      *
@@ -73,7 +72,7 @@ class User extends Authenticatable
 
     protected function memberSince():Attribute{
         return Attribute::make(
-            get : fn(mixed $value , array $attributes)=>'Member Since'.$this->created_at->format('F Y'),
+            get : fn(mixed $value , array $attributes)=>'Member Since '.$this->created_at->format('F Y'),
         );
     }
 
@@ -100,7 +99,7 @@ class User extends Authenticatable
         return $this->hasMany(Project::class ,'client_id');
     }
 
-    public function proposal():HasMany{
+    public function proposals():HasMany{
         return $this->hasMany(Proposal::class,'freelancer_id');
     }
 

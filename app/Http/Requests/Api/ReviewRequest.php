@@ -14,7 +14,7 @@ class ReviewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $project=Project::with(['proposal'=>function($query){
+        $project=Project::with(['proposals'=>function($query){
             $query->where('status','accepted');
         }])->find($this->project_id);
         if(!$project) return false;

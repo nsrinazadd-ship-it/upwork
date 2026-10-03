@@ -16,6 +16,7 @@ class Project extends Model
 {
     protected $fillable = [
         'client_id',
+        'freelancer_id',
         'category_id',
         'title',
         'description',
@@ -33,6 +34,13 @@ class Project extends Model
         ];
     }
 
+    protected function isExpired():Attribute{
+        return Attribute::make(
+            get: fn()=>$this->status === ProjectStatus::OPEN
+            && $this->deadlline !== null
+            && $this ->deadline->isPast(),
+        );
+    }
 
     protected function budgetDisplay():Attribute{
         return Attribute::make(
@@ -43,6 +51,8 @@ class Project extends Model
             }
         );
     }
+
+
 
     protected function budget():Attribute{
         return Attribute::make(
@@ -87,6 +97,11 @@ class Project extends Model
 
     public function scopeThisMonth(Builder $query):Builder{
         return $query->where('created_at','>=',now()->startOfMonth());
+    }
+
+    public function scopeExpired(Builder $query):Builder{
+        return $query->where('status', ProjectStatus::OPEN)
+            ->where('deadline','<',now());
     }
 
 

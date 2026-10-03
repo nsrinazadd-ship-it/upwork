@@ -27,7 +27,7 @@ class StoreProposalRequest extends FormRequest
             abort(404,'المشروع غير موجود.');
         }
 
-        if($project->status !== 'open' ){
+        if($project->status->value !== 'open' ){
             abort(403,'عذراً، هذا المشروع مغلق ولم يعد يستقبل عروضاً جديدة.');
         }
 
