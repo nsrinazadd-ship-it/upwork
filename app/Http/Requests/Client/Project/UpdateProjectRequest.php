@@ -28,8 +28,8 @@ class UpdateProjectRequest extends FormRequest
             'description'  => ['required', 'string', 'min:30'],
             'budget'       => ['required', 'numeric', 'min:10'],
             'deadline'     => ['required', 'date', 'after:today'],
-            'skills'       => ['required', 'array', 'min:1'],
-            'skills.*'     => ['exists:skills,id'],
+            'tags'       => ['required', 'array', 'min:1','max:5'],
+            'tags.*'     => ['exists:tags,id'],
         ];
     }
 }

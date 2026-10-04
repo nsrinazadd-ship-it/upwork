@@ -39,12 +39,12 @@ class ProjectController extends Controller
 
         $project=DB::transaction(function()use ($validated){
             $newProject=Project::create($validated);
-            $newProject->skills()->attach($validated['skills']);
+            $newProject->tags()->attach($validated['tags']);
             return $newProject;
         });
 
         return $this->success(
-            new ProjectResource($project->load('skills')),
+            new ProjectResource($project->load('tags')),
             'Project created successfully.'
         );
 
@@ -73,10 +73,10 @@ class ProjectController extends Controller
 
         DB::transaction(function() use ($validated,$project){
             $project->update($validated);
-            $project->skills()->sync($validated['skills']);
+            $project->tags()->sync($validated['tags']);
         });
         return $this->success(
-            new ProjectResource($project->load('skills')),
+            new ProjectResource($project->load('tags')),
             'Project updated successfully.'
         );
 

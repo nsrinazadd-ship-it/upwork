@@ -48,6 +48,11 @@ class StoreProjectRequest extends FormRequest
                 new ProhibitOffensiveContent()
             ],
 
+            'category_id' => [
+                'required',
+                'exists::categories,id'
+            ],
+
             'budget_type' => [
                 'required',
                 'in:fixed,hourly'
@@ -62,7 +67,7 @@ class StoreProjectRequest extends FormRequest
                 Rule::when($this->budget_type === 'hourly', ['min:5', 'max:150']),
             ],
 
-            'delivery_date' => [
+            'deadline' => [
                 'required',
                 'date',
                 'after:now'
@@ -75,8 +80,7 @@ class StoreProjectRequest extends FormRequest
             ],
 
             'tags.*' => [
-                'string',
-                'max:20'
+                'exists:tags,id'
             ],
         ];
     }
