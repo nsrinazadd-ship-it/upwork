@@ -50,7 +50,7 @@ class StoreProjectRequest extends FormRequest
 
             'category_id' => [
                 'required',
-                'exists::categories,id'
+                'exists:categories,id'
             ],
 
             'budget_type' => [
