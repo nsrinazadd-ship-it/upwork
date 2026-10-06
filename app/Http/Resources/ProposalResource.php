@@ -17,9 +17,9 @@ class ProposalResource extends JsonResource
     {
         return [
             'id'=> $this->id,
-            'bid_amount'=>"$ ".($this->budget/100),
-            'estimated_days' => "{$this->delivery_time} days",
-            'description'   => $this->description,
+            'bid_amount'=>"$ ".$this->bid_amount,
+            'estimated_days' => "{$this->estimated_days} days",
+            'cover_letter'   => $this->cover_letter,
             'status'        => $this->status,
             'created_at'    => $this->created_at?->diffForHumans(),
             'freelancer'=>FreelancerResource::make($this->freelancer?->freelancerProfile),

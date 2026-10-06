@@ -21,7 +21,7 @@ class RegisterTest extends TestCase
             'role' => 'client',
         ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(201)
             ->assertJsonStructure(['data' => ['user', 'access_token', 'token_type']]);
 
         $this->assertDatabaseHas('users', [

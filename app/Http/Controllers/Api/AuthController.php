@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         $token=$user->createToken($request->input('device_name', 'web_app'))->plainTextToken;
 
-        return $this->success([
+        return $this->created([
             'user'         => $user,
             'access_token' => $token,
             'token_type'   => 'Bearer'
@@ -53,10 +53,15 @@ class AuthController extends Controller
         );
     }
 
-    public function logout():JsonResponse{
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $user->currentAccessToken()->delete();
-        return $this->success(null, 'Logged out successfully and token revoked.');
-    }
+public function logout(): JsonResponse
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+    $token = $user->currentAccessToken();
+    $token->delete();
+
+    return $this->success(null, 'Logged out successfully and token revoked.');
+}
 }

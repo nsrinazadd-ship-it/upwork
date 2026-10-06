@@ -34,7 +34,7 @@ class ProposalTest extends TestCase
             'estimated_days' => 7,
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $this->assertDatabaseHas('proposals', [
             'project_id' => $project->id,
             'freelancer_id' => $freelancer->id,

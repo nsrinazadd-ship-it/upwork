@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Proposal;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class ProposalDecisionTest extends TestCase
@@ -93,4 +94,24 @@ class ProposalDecisionTest extends TestCase
 
         $response->assertStatus(422);
     }
+
+    public function test_accept_is_all_or_nothing_when_rejecting_the_others_fails(): void
+{
+    $client  = User::factory()->create(['role' => 'client']);
+    $project = Project::factory()->create(['client_id' => $client->id, 'status' => 'open']);
+    $winner  = Proposal::factory()->create(['project_id' => $project->id, 'status' => 'pending']);
+    Proposal::factory()->create(['project_id' => $project->id, 'status' => 'pending']);
+
+    DB::beforeExecuting(function (string $query, array $bindings) {
+        if (str_starts_with($query, 'update') && str_contains($query, 'proposals')
+            && in_array('rejected', $bindings, true)) {
+            throw new \RuntimeException('simulated failure');
+        }
+    });
+
+    $this->actingAs($client)->patchJson("/api/proposals/{$winner->id}/accept");
+
+    $this->assertDatabaseHas('proposals', ['id' => $winner->id, 'status' => 'pending']);
+    $this->assertDatabaseHas('projects', ['id' => $project->id, 'status' => 'open']);
+}
 }

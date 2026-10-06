@@ -39,7 +39,7 @@ class Project extends Model
     protected function isExpired():Attribute{
         return Attribute::make(
             get: fn()=>$this->status === ProjectStatus::OPEN
-            && $this->deadlline !== null
+            && $this->deadline !== null
             && $this ->deadline->isPast(),
         );
     }

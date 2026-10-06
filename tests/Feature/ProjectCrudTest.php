@@ -35,7 +35,7 @@ class ProjectCrudTest extends TestCase
 
         $response = $this->actingAs($client)->postJson('/api/projects', $this->validProjectPayload());
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $this->assertDatabaseHas('projects', [
             'client_id' => $client->id,
             'status' => 'open',

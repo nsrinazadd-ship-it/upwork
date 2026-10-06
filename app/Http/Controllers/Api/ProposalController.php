@@ -55,7 +55,7 @@ class ProposalController extends Controller
         $validate['freelancer_id']=Auth::id();
         $proposal=Proposal::create($validate);
 
-        return $this->success(
+        return $this->created(
             new ProposalResource($proposal),
             'Your proposal has been submitted successfully!'
         );
@@ -96,12 +96,13 @@ class ProposalController extends Controller
                     'status'=>'in_progress',
                     'freelancer_id'=>$proposal->freelancer_id
                 ]);
+                $proposal->project->proposals()
+                ->where('id','!=',$proposal->id)
+                ->where('status','pending')
+                ->update(['status' => 'rejected']);
             });
 
-            $proposal->project->proposals()
-            ->where('id','!=',$proposal->id)
-            ->where('status','pending')
-            ->update(['status' => 'rejected']);
+
 
             return $this->success(
                 new ProposalResource($proposal->load('project')),

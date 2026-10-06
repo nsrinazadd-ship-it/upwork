@@ -43,21 +43,24 @@ class ProjectController extends Controller
             return $newProject;
         });
 
-        return $this->success(
+        return $this->created(
             new ProjectResource($project->load('tags')),
             'Project created successfully.'
         );
 
     }
-    public function show(Project $project):JsonResponse
+    public function show(Request $request,Project $project):JsonResponse
     {
         $project->load(
             'client',
             'tags',
             'attachments',
             'reviews.reviewer',
-            'proposals.freelancer.skills'
-        )->loadAvg('reviews', 'rating');
+        )->loadCount('proposals')
+        ->loadAvg('reviews', 'rating');
+        if ($request->user('sanctum')?->id === $project->client_id){
+            $project->load('proposals.freelancer.freelancerProfile.skills');
+        }
 
         return $this->success(
             new ProjectDetailResource($project),
