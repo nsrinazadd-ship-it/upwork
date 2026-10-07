@@ -1,7 +1,7 @@
 <?php
 namespace App\Enums;
 
-enum ProposalSatuts :string{
+enum ProposalStatus:string{
     case PENDING='pending';
     case ACCEPTED ='accepted';
     case REJECTED ='rejected';

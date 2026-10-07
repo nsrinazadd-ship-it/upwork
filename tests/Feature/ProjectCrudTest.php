@@ -7,6 +7,8 @@ use App\Models\Project;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class ProjectCrudTest extends TestCase
@@ -135,4 +137,20 @@ class ProjectCrudTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+
+    public function test_creating_a_project_still_works_when_the_moderation_api_is_down(): void
+{
+    Http::fake([
+        'api.openai.com/*' => fn () => throw new ConnectionException('timeout'),
+    ]);
+
+    $client = User::factory()->create(['role' => 'client']);
+
+    $this->actingAs($client)
+        ->postJson('/api/projects', $this->validProjectPayload())
+        ->assertStatus(201);
+}
+
+
 }

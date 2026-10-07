@@ -5,8 +5,10 @@ namespace Tests\Feature;
 use App\Models\Category;
 use App\Models\Project;
 use App\Models\Proposal;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class ProposalTest extends TestCase
@@ -20,6 +22,7 @@ class ProposalTest extends TestCase
             'status' => 'open',
         ]);
     }
+
 
     public function test_freelancer_can_submit_proposal_on_open_project(): void
     {
@@ -106,4 +109,6 @@ class ProposalTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonCount(1, 'data.data');
     }
+
+
 }

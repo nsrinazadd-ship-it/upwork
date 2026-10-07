@@ -3,6 +3,9 @@
 namespace Tests\Unit;
 
 use App\Models\Project;
+use App\Models\User;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class ProjectExpiryTest extends TestCase

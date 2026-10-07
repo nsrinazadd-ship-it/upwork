@@ -233,10 +233,24 @@ class RateLimitTest extends TestCase
         $this->exhaustLimit();
         $this->login()->assertStatus(429);
 
-        // نفس صيغة المفتاح اللي بيبنيها الـ ThrottleRequests للـ named limiters
         $key = md5('auth' . strtolower(self::EMAIL) . '|127.0.0.1');
         app(RateLimiter::class)->clear($key);
 
         $this->login()->assertStatus(401);
     }
+
+    public function test_one_ip_is_capped_even_when_the_email_changes_every_time(): void
+{
+    for ($i = 1; $i <= 20; $i++) {
+        $this->postJson('/api/login', [
+            'email'    => "user{$i}@example.com",
+            'password' => 'wrong-password',
+        ])->assertStatus(401);
+    }
+
+    $this->postJson('/api/login', [
+        'email'    => 'user21@example.com',
+        'password' => 'wrong-password',
+    ])->assertStatus(429);
+}
 }

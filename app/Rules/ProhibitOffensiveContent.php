@@ -35,7 +35,7 @@ class ProhibitOffensiveContent implements ValidationRule
                     }
                 }
         }catch(\Exception $e){
-            Log::error('OpenAI Moderation API failed:',$e->getMessage());
+            Log::error('OpenAI Moderation API failed:',['error' =>$e->getMessage()]);
             if($this->fallbackLocalCheck($value)){
                 $fail('المحتوى يحتوي على كلمات محظورة (فحص احتياطي).');
             }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\ProposalSatuts;
+use App\Enums\ProposalStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,7 +27,7 @@ class Proposal extends Model
     protected function casts()
     {
         return [
-            'status'=>ProposalSatuts::class,
+            'status'=>ProposalStatus::class,
         ];
     }
 
